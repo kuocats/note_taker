@@ -9,6 +9,7 @@ router.get('/notes', (req, res) => {
 });
 
 router.post('/notes', (req, res) => {
+    
     const {title, text} = req.body;
 
     if (title && text) {
