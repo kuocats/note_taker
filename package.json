@@ -1,22 +1,19 @@
 {
   "name": "note_taker",
   "versions": "1.0.0",
-  "engines": {
-    "node": "18.16.0",
+ "engines": {
+   "node": "18.16.0",
     "npm": "9.5.1"
   },
   "description": "An application that can be used to write and save notes.   This application uses Express.js back end and will save and retrieve note data from a JSON file.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^4.16.4",
     "uuid": "^9.0.0"
-  },
-  "version": "1.0.0",
-  "keywords": []
+  }
 }
