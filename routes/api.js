@@ -45,21 +45,21 @@ router.post('/notes', (req, res) => {
 router.delete('/notes/:id', (req, res) => {
     const { id } = req.params;
 
-    fs.readFile("./db/db.json", "utf8", (error,data) => 
+    fs.readFile("./db/db.json", "utf8", (error, data) => 
     error ? console.error(error) : (notes = JSON.parse(data))
     );
 
     const deleteNote = notes.filter(note => note.id === req.params.id)
 
-    if (deletedNote) {
+    if (deleteNote) {
         let notesFilter = notes.filter(note => note.id != req.params.id)
-        let noteString = JSON.stringify(filteredNotes, null, 3);
+        let noteString = JSON.stringify(notesFilter, null, 3);
         fs.writeFile(`./db/db.json`, noteString, (err) =>
         err
         ? console.error(err)
-        :console.log('Note is deleted!'));
+        : console.log('Note is deleted!'));
 
-        res.status(200).json(filteredNotes);
+        res.status(200).json(notesFilter);
     } else {
         res.status(500).json('Error deleting note');
     }
