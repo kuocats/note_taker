@@ -10,7 +10,7 @@ app.use(express.static('public'));
 const APIrouter = require("./routes/api.js");
 const HTMLrouter = require("./routes/html.js");
 
-app.use("/api, APIrouter");
+app.use(APIrouter);
 app.use(HTMLrouter);
 
 app.listen(PORT, () =>
