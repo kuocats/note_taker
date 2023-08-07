@@ -2,8 +2,8 @@
   "name": "note_taker",
   "versions": "1.0.0",
   "engines": {
-    "node": "16.19.1",
-    "npm": "8.9.3"
+    "node": "18.16.0",
+    "npm": "9.5.1"
   },
   "description": "",
   "main": "server.js",
