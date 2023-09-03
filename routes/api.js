@@ -1,45 +1,63 @@
-const express = require('express');
-const router = express.Router();
-const fs = require('fs');
-let notes = require('../db/db.json');
-const { v4: uuidv4 } = require ('uuid');
+const uuid = require("../helpers/uuid");
+const {
+  readFromFile,
+  writeToFile,
+  readAndAppend,
+} = require("../helpers/fsUtils");
 
-router.get('/notes', (req, res) => {
-    res.json(notes);
-});
+module.exports = (app) => {
+  //GET route to retrieve notes from api database
+  app.get("/api/notes", (req, res) => {
+    //log request to terminal
+    console.log(`${req.method} request received to get notes`);
+    //display notes data to client
+    readFromFile("./db/notes.json")
+      .then((data) => res.status(200).json(JSON.parse(data)))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send("Error loading notes data");
+      });
+  });
 
-router.post('/notes', (req, res) => {
-    
-    const {title, text} = req.body;
-
+  //post route to submit notes to api database
+  app.post("/api/notes", (req, res) => {
+    //destructuring assignment for items in req.body
+    const { title, text } = req.body;
+    //if both note components are present
     if (title && text) {
-        const newNote = {
-            title,
-            text,
-            id: uuidv4(),
-        };
+      //variable for note object to be saved
+      const newNote = {
+        title,
+        text,
+        id: uuid(),
+      };
 
-        notes.push(newNote);
+      readAndAppend(newNote, "./db/notes.json");
 
-        let noteString = JSON.stringify(notes, null, 3);
+      const response = {
+        status: "success",
+        body: newNote,
+      };
 
-        fs.writeFile(`./db/db.json`, noteString, (err) =>
-        err
-            ? console.error(err)
-            : console.log(`New Note Added!`)
-        );
-
-        const response = {
-            status: 'success',
-            body: newNote,
-        };
-
-        console.log(reponse);
-
-        res.status(201).json(response);
-    } else {
-        res.status(500).json('Not able to add note!')
+      console.log(response);
+      res.status(201).json(response);
     }
-});
+  });
 
-module.exports = router; 
+  //delete route to delete notes from api database
+  app.delete("/api/notes/:id", (req, res) => {
+    const noteId = req.params.id;
+    readFromFile("./db/notes.json")
+      .then((data) => JSON.parse(data))
+      .then((json) => {
+        // Make a new array of all tips except the one with the ID provided in the URL
+        const result = json.filter((note) => note.id !== noteId);
+
+        // Save that array to the filesystem
+        writeToFile("./db/notes.json", result);
+
+        // Respond to the DELETE request
+        res.json(`Note ${noteId} has been deleted 🗑️`);
+      });
+  });
+};
