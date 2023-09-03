@@ -11,7 +11,7 @@ module.exports = (app) => {
     //log request to terminal
     console.log(`${req.method} request received to get notes`);
     //display notes data to client
-    readFromFile("./db/notes.json")
+    readFromFile("./db/db.json")
       .then((data) => res.status(200).json(JSON.parse(data)))
       .catch((err) => {
         console.log(err);
@@ -32,7 +32,7 @@ module.exports = (app) => {
         id: uuid(),
       };
 
-      readAndAppend(newNote, "./db/notes.json");
+      readAndAppend(newNote, "./db/db.json");
 
       const response = {
         status: "success",
@@ -47,14 +47,14 @@ module.exports = (app) => {
   //delete route to delete notes from api database
   app.delete("/api/notes/:id", (req, res) => {
     const noteId = req.params.id;
-    readFromFile("./db/notes.json")
+    readFromFile("./db/db.json")
       .then((data) => JSON.parse(data))
       .then((json) => {
         // Make a new array of all tips except the one with the ID provided in the URL
         const result = json.filter((note) => note.id !== noteId);
 
         // Save that array to the filesystem
-        writeToFile("./db/notes.json", result);
+        writeToFile("./db/db.json", result);
 
         // Respond to the DELETE request
         res.json(`Note ${noteId} has been deleted 🗑️`);
