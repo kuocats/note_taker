@@ -1,18 +1,20 @@
-const express = require('express');
-const app = express();
+const express = require("express");
 const PORT = process.env.PORT || 3001;
+const app = express();
 
+//middlware for parsing 
 app.use(express.json());
-app.use(express.urlencoded({ extended:true }));
-app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
 
-const APIrouter = require("./routes/api.js");
-const HTMLrouter = require("./routes/html.js");
 
-app.use(HTMLrouter);
-app.use("/api", APIrouter);
+app.use(express.static("public"));
 
+//html routes
+require("./routes/htmlRoutes")(app);
+
+// //api routes
+require("./routes/apiRoutes")(app);
 
 app.listen(PORT, () =>
-    console.log(`Listening at http://localhost:${PORT}`)
+  console.log(`App listening at http://localhost:${PORT} 🚀`)
 );
